@@ -59,12 +59,14 @@ def resize_images(Orig_pth, padd_pth, excel_path):
 
     for img in tqdm(os.listdir(Orig_pth)):
         pth = Orig_pth+img
+        ext = pth.split('.')[-1].lower()
+        name = img.split('.')[0]
+        onesideW = 0
+        onesideH = 0
         try:
-            onesideW = 0
-            onesideH = 0
             im = Image.open(pth)
-            width, height = im.size
-            try:
+            width, height = im.size  
+            try:   
                 if width < 500 or height < 500: 
                     if width < 500:
                         paddingWidth = 500 - width
@@ -83,14 +85,24 @@ def resize_images(Orig_pth, padd_pth, excel_path):
                 elif width > 2800 and height > 2800:
                     onesideW = 2800 - width
                     onesideH = 2800 - height
+                elif width < 2800 and width > 500 and height < 2800 and height > 500:
+                    onesideW = 0
+                    onesideH = 0
             except:
                 pass     
             new_width = width + onesideW + onesideW
             new_height = height + onesideH + onesideH
             result = Image.new(im.mode, (new_width, new_height), (255, 255, 255))
             result.paste(im, (onesideW, onesideH))
-            result_name = padd_pth + img
-            result.save(result_name)
+            if 'jpg' in ext:
+                result_name = padd_pth + name+'.jpg'
+                result.save(result_name)
+            elif 'png' in ext:
+                result_name = padd_pth + name+'.png'
+                result.save(result_name)
+            elif 'JPG' in ext:
+                result_name = padd_pth + name+'.webp'
+                result.save(result_name)
         except:
             pass
     return str('Padding Completed')
