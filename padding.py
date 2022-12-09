@@ -51,7 +51,7 @@ def resize_images(Orig_pth, padd_pth, excel_path):
         ext = l[0].split('.')[-1]
         name = l[1]+ '.'+ ext
         if name not in check:
-            download_images(Orig_pth, LST)
+            download_images(Orig_pth, l)
         else:
             break
     if not os.path.exists(padd_pth):
